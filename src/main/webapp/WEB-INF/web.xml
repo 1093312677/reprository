@@ -31,25 +31,47 @@
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+  <!-- 防止spring内存溢出监听器，比如quartz -->
+  <listener>
+    <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+  </listener>
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>
       classpath:applicationContext.xml
     </param-value>
   </context-param>
+  <context-param>
+    <param-name/>
+    <param-value/>
+  </context-param>
 
+
+  <!-- spring mvc servlet-->
   <servlet>
     <servlet-name>dispatcher</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:applicationContext.xml</param-value>
+    </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
-
-
-
   <servlet-mapping>
     <servlet-name>dispatcher</servlet-name>
-    <url-pattern>*.do</url-pattern>
+    <!-- 此处也可以配置成 *.do 形式 -->
+    <url-pattern>/</url-pattern>
   </servlet-mapping>
+
+  <welcome-file-list>
+    <welcome-file>/index.jsp</welcome-file>
+  </welcome-file-list>
+
+  <!-- session配置 -->
+  <session-config>
+    <session-timeout>15</session-timeout>
+  </session-config>
+
 
 </web-app>
 

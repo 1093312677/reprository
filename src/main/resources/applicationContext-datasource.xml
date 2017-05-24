@@ -8,9 +8,6 @@
      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
-
-    <context:component-scan base-package="com.reprository" annotation-config="true"/>
-
     <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="order" value="2"/>
@@ -59,8 +56,10 @@
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="mapperLocations" value="classpath*:mappers/*Mapper.xml"></property>
-
+        <!-- 指定sqlMapConfig总配置文件，订制的environment在spring容器中不在生效
+        <property  name="mapperLocations"  value="classpath*:com/mapping/*.xml"/>-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+        <property name="typeAliasesPackage" value="com.entity"/>
         <!-- 分页插件 -->
         <property name="plugins">
             <array>
@@ -76,8 +75,14 @@
 
     </bean>
 
-    <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.reprository.dao"/>
+
+
+    <!-- 配置Mapper扫描器 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 扫描包路径,如果需要扫描多个包中间用半角逗号隔开 -->
+        <property name="basePackage" value="com.mapper"/>
+        <!-- 这边不能使用ref="sqlSessionFactory"原因是因为上面加载配置文件导致这边引用会报错 -->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
     </bean>
 
     <!-- 使用@Transactional进行声明式事务管理需要声明下面这行 -->

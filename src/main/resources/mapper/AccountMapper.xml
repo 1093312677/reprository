@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.AccountMapper">
+    <!-- 目的：为dao接口方法提供sql语句配置 -->
+    <select id="insertUser" resultType="User" parameterType="String">
+        <!-- 具体的sql -->
+        INSERT INTO user(id,username,password) VALUES (#{id},#{username},#{password});
+    </select>
+
+    <select id="getUsers" resultType="User" parameterType="int">
+        SELECT
+        id,
+        username,
+        password
+        FROM
+        user
+        ORDER BY
+        id
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <update id="reduceNumber">
+        UPDATE user
+        SET id = id - 1
+        WHERE
+        id = #{id}
+    </update>
+</mapper>
